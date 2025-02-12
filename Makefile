@@ -12,6 +12,7 @@ SOURCES_RADIX = radix.cu
 EXEC_V0 = bitonic_v0
 EXEC_V1 = bitonic_v1
 EXEC_V2 = bitonic_v2
+EXEC_V3 = bitonic_v3
 EXEC_RADIX = radix_sort
 
 # Default target: prints help
@@ -20,10 +21,10 @@ EXEC_RADIX = radix_sort
 # Help message
 help:
 	@echo "Usage:"
-	@echo "  make bitonic v=[0|1|2]        : Build bitonic sort version (v) 0, 1, or 2"
+	@echo "  make bitonic v=[0|1|2|3]        : Build bitonic sort version (v) 0, 1, 2, or 3"
 	@echo "  make radix                    : Build radix sort"
 	@echo "  make all                      : Build all sorting implementations"
-	@echo "  make run v=[0|1|2|radix] q=[value]  : Run sorting algorithm (builds if needed)"
+	@echo "  make run v=[0|1|2|3|radix] q=[value]  : Run sorting algorithm (builds if needed)"
 	@echo "  make clean                    : Remove all compiled files"
 
 # Build bitonic sort executables
@@ -32,11 +33,11 @@ bitonic_v%: bitonic_sortV%.cu
 
 bitonic:
 	@if [ -z "$(v)" ]; then \
-		echo "Usage: make bitonic v=[0|1|2]"; exit 1; \
-	elif [ "$(v)" = "0" -o "$(v)" = "1" -o "$(v)" = "2" ]; then \
+		echo "Usage: make bitonic v=[0|1|2|3]"; exit 1; \
+	elif [ "$(v)" = "0" -o "$(v)" = "1" -o "$(v)" = "2" -o "$(v)" = "3" ]; then \
 		$(MAKE) bitonic_v$(v); \
 	else \
-		echo "Error: Invalid VERSION (v). Use 0, 1, or 2"; exit 1; \
+		echo "Error: Invalid VERSION (v). Use 0, 1, 2, or 3"; exit 1; \
 	fi
 
 # Radix sort target
@@ -47,17 +48,17 @@ radix:
 	$(MAKE) $(EXEC_RADIX)
 
 # Build all sorting implementations
-all: $(EXEC_V0) $(EXEC_V1) $(EXEC_V2) $(EXEC_RADIX)
+all: $(EXEC_V0) $(EXEC_V1) $(EXEC_V2) $(EXEC_V3) $(EXEC_RADIX)
 
 # Run target with checks
 run:
 	@if [ -z "$(v)" ] || [ -z "$(q)" ]; then \
-		echo "Usage: make run v=[0|1|2|radix] q=[value]"; exit 1; \
+		echo "Usage: make run v=[0|1|2|3|radix] q=[value]"; exit 1; \
 	else \
 		case "$(v)" in \
-			0|1|2) $(MAKE) bitonic_v$(v) && ./bitonic_v$(v) $(q) ;; \
+			0|1|2|3) $(MAKE) bitonic_v$(v) && ./bitonic_v$(v) $(q) ;; \
 			radix) $(MAKE) $(EXEC_RADIX) && ./$(EXEC_RADIX) $(q) ;; \
-			*) echo "Error: Invalid version (v). Use 0, 1, 2, or radix"; exit 1 ;; \
+			*) echo "Error: Invalid version (v). Use 0, 1, 2, 3, or radix"; exit 1 ;; \
 		esac; \
 	fi
 

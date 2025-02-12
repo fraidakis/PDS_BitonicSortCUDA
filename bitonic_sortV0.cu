@@ -71,7 +71,6 @@ void bitonicSortV0(int *array, size_t size)
     // Start timing before data transfer and kernel execution
     cudaEventRecord(start);
 
-
     /************************************************************************/
 
     // Transfer host data to device memory
@@ -119,7 +118,6 @@ void bitonicSortV0(int *array, size_t size)
 
     /************************************************************************/
 
-
     // Record the stop event and synchronize to ensure all work is complete for timing
     cudaEventRecord(stop);
     cudaEventSynchronize(stop);
@@ -150,8 +148,9 @@ int main(int argc, char **argv)
     // Calculate the total number of elements to sort (2^q)
     size_t size = 1 << q; // Using bit shifting to compute power of 2
 
-    // Allocate host memory for the array to be sorted
-    int *array = (int *)malloc(size * sizeof(int));
+    // Allocate pinned host memory for the array to be sorted
+    int *array;
+    cudaHostAlloc((void **)&array, size * sizeof(int), cudaHostAllocDefault);
 
     // Seed the random number generator using the current time for varied results
     srand(time(NULL));
@@ -163,8 +162,9 @@ int main(int argc, char **argv)
     }
 
 #ifdef VERIFY
-    // Optionally create a copy of the array to verify sorting later
-    int *sequential_array = (int *)malloc(size * sizeof(int));
+    // Optionally create a copy of the array to verify sorting later using pinned memory
+    int *sequential_array;
+    cudaHostAlloc((void **)&sequential_array, size * sizeof(int), cudaHostAllocDefault);
     memcpy(sequential_array, array, size * sizeof(int));
 #endif
 
@@ -182,8 +182,12 @@ int main(int argc, char **argv)
     sequential_sort_verify(array, sequential_array, size);
 #endif
 
-    // Free the allocated host memory
-    free(array);
+    // Free the allocated pinned host memory
+    cudaFreeHost(array);
+#ifdef VERIFY
+    cudaFreeHost(sequential_array);
+#endif
+
     return 0;
 }
 
@@ -220,7 +224,6 @@ void sequential_sort_verify(int *array, int *sequential_array, size_t size)
         }
     }
 
-    // Free the verification array and output the final result.
-    free(sequential_array);
+    // Use cudaFreeHost instead of free for pinned memory
     printf("\n%s sorting %zu elements\n\n\n", is_sorted ? "SUCCESSFUL" : "FAILED", size);
 }
