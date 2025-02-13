@@ -69,66 +69,77 @@ void cubRadixSort(int *h_array, size_t size) {
     cudaFree(d_temp_storage);
 }
 
-int main(int argc, char **argv) {
-    // Verify command line arguments
-    if (argc != 2) {
+int main(int argc, char **argv)
+{
+    // Verify the command-line arguments (should be exactly 2: program name and q)
+    if (argc != 2)
+    {
         fprintf(stderr, "Usage: %s <q>\n", argv[0]);
         return 1;
     }
 
-    // Parse input size (q is log2 of array size)
-    int q = atoi(argv[1]);         // Convert string to integer
-    size_t size = 1 << q;          // Calculate array size as 2^q
+    // Convert argument to integer: q is the log2 of the number of elements to sort
+    int q = atoi(argv[1]);
 
-    // Allocate and initialize input array
-    int *array = (int *)malloc(size * sizeof(int));
-    srand(time(NULL));  // Seed random number generator
+    // Calculate the total number of elements to sort (2^q)
+    size_t size = 1 << q; // Using bit shifting to compute power of 2
 
-    // Fill array with random values
-    for (int i = 0; i < size; i++) {
-        array[i] = rand() % 1000;  // Random values between 0 and 999
+    // Replace regular malloc with pinned memory allocation
+    int *array;
+    cudaHostAlloc((void**)&array, size * sizeof(int), cudaHostAllocDefault);
+
+
+    // Seed the random number generator using the current time for varied results
+    srand(time(NULL));
+
+    // Fill the array with random integers (0 to 999)
+    for (int i = 0; i < size; i++)
+    {
+        array[i] = rand() % 1000; // Random integer between 0 and 999
     }
 
-    #ifdef VERIFY
-        // Create a copy for verification if VERIFY is defined
-        int *sequential_array = (int *)malloc(size * sizeof(int));
-        memcpy(sequential_array, array, size * sizeof(int));
-    #endif
+#ifdef VERIFY
+    // Use pinned memory for verification array as well
+    int *sequential_array;
+    cudaHostAlloc((void**)&sequential_array, size * sizeof(int), cudaHostAllocDefault);
+    memcpy(sequential_array, array, size * sizeof(int));
+#endif
 
-    // Perform radix sort using CUB
+    // Run the bitonic sort on the array
     cubRadixSort(array, size);
 
-    #ifdef VERIFY
-        // Verify sort correctness if VERIFY is defined
-        sequential_sort_verify(array, sequential_array, size);
-    #endif
+#ifdef VERIFY
+    // Verify that the sorted array matches what a sequential sort produces
+    sequential_sort_verify(array, sequential_array, size);
+#endif
 
-    // Cleanup
-    free(array);
+    // Replace free with cudaFreeHost
+    cudaFreeHost(array);
+#ifdef VERIFY
+    cudaFreeHost(sequential_array);
+#endif
+
     return 0;
 }
 
-// Verification function to compare GPU sort against CPU sort
+// Function to verify the correctness of the bitonic sort by comparing
+// with the result of the C standard library's sequential qsort function.
 void sequential_sort_verify(int *array, int *sequential_array, size_t size)
 {
-    // Sort the verification array using standard library qsort
+    // Sort using qsort on a copy of the array. This is our reference.
     qsort(sequential_array, size, sizeof(int), compareAscending);
 
-    // Compare the two sorted arrays element by element
-    int is_sorted = 1;
+    // Compare each element of the two arrays. Report a mismatch if found.
+    bool is_sorted = true;
     for (int i = 0; i < size; i++)
     {
         if (array[i] != sequential_array[i])
         {
-            printf("Error: Mismatch at index %d: %d != %d\n", 
-                   i, array[i], sequential_array[i]);
-            is_sorted = 0;
+            printf("Error: Mismatch at index %d: %d != %d\n", i, array[i], sequential_array[i]);
+            is_sorted = false;
             break;
         }
     }
 
-    // Free verification array and print result
-    free(sequential_array);
-    printf("\n%s sorting %zu elements\n\n\n", 
-           is_sorted ? "SUCCESSFUL" : "FAILED", size);
+    printf("\n%s sorting %zu elements\n\n\n", is_sorted ? "SUCCESSFUL" : "FAILED", size);
 }

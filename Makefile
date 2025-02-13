@@ -1,19 +1,24 @@
 # Compiler settings
 NVCC = nvcc
-NVCC_FLAGS = -O3
+NVCC_FLAGS = 
+
+# Directories
+SRC_DIR = src
+BIN_DIR = bin
 
 # Source files
-SOURCES_V0 = bitonic_sortV0.cu
-SOURCES_V1 = bitonic_sortV1.cu
-SOURCES_V2 = bitonic_sortV2.cu
-SOURCES_RADIX = radix.cu
+SOURCES_V0 = $(SRC_DIR)/bitonic_sortV0.cu
+SOURCES_V1 = $(SRC_DIR)/bitonic_sortV1.cu
+SOURCES_V2 = $(SRC_DIR)/bitonic_sortV2.cu
+SOURCES_V3 = $(SRC_DIR)/bitonic_sortV3.cu
+SOURCES_RADIX = $(SRC_DIR)/radix_sort.cu
 
 # Executables
-EXEC_V0 = bitonic_v0
-EXEC_V1 = bitonic_v1
-EXEC_V2 = bitonic_v2
-EXEC_V3 = bitonic_v3
-EXEC_RADIX = radix_sort
+EXEC_V0 = $(BIN_DIR)/bitonic_v0
+EXEC_V1 = $(BIN_DIR)/bitonic_v1
+EXEC_V2 = $(BIN_DIR)/bitonic_v2
+EXEC_V3 = $(BIN_DIR)/bitonic_v3
+EXEC_RADIX = $(BIN_DIR)/radix_sort
 
 # Default target: prints help
 .DEFAULT_GOAL := help
@@ -27,22 +32,25 @@ help:
 	@echo "  make run v=[0|1|2|3|radix] q=[value]  : Run sorting algorithm (builds if needed)"
 	@echo "  make clean                    : Remove all compiled files"
 
-# Build bitonic sort executables
-bitonic_v%: bitonic_sortV%.cu
+# Build bitonic sort executables into bin folder
+$(BIN_DIR)/bitonic_v%: $(SRC_DIR)/bitonic_sortV%.cu
+	mkdir -p $(BIN_DIR)
 	$(NVCC) $(NVCC_FLAGS) $< -o $@
 
 bitonic:
 	@if [ -z "$(v)" ]; then \
 		echo "Usage: make bitonic v=[0|1|2|3]"; exit 1; \
 	elif [ "$(v)" = "0" -o "$(v)" = "1" -o "$(v)" = "2" -o "$(v)" = "3" ]; then \
-		$(MAKE) bitonic_v$(v); \
+		$(MAKE) $(BIN_DIR)/bitonic_v$(v); \
 	else \
 		echo "Error: Invalid VERSION (v). Use 0, 1, 2, or 3"; exit 1; \
 	fi
 
 # Radix sort target
 $(EXEC_RADIX): $(SOURCES_RADIX)
+	mkdir -p $(BIN_DIR)
 	$(NVCC) $(NVCC_FLAGS) $(SOURCES_RADIX) -o $@
+
 
 radix:
 	$(MAKE) $(EXEC_RADIX)
@@ -64,8 +72,8 @@ run:
 
 # Clean
 clean:
-	rm -f $(EXEC_V0) $(EXEC_V1) $(EXEC_V2) $(EXEC_RADIX)
-
+	rm -rf $(BIN_DIR)
+	
 # Catch invalid targets
 %:
 	@echo "Error: Unknown target '$@'"
