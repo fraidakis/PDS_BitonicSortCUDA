@@ -64,25 +64,23 @@ __global__ void intraBlockMergeShared(int *data, size_t size, int dimension, int
     }
 
     // Second loop: for distances < warpSize using __shfl_sync
+    int myVal = sharedData[local_tid];  // Load once into a register
     for (int distance = warpSize >> 1; distance > 0; distance >>= 1) {
-        int partner = local_tid ^ distance;
-        int myVal = sharedData[local_tid];
-        // Use __shfl_sync to exchange values among threads within the same warp.
-        int partnerVal = __shfl_sync(0xffffffff, myVal, partner);
-        if (local_tid < partner) {
-            myVal = isAscending ? (myVal < partnerVal ? myVal : partnerVal)
-                                : (myVal > partnerVal ? myVal : partnerVal);
+        int partner_tid = local_tid ^ distance;
+        int partner_val = __shfl_sync(0xFFFFFFFF, myVal, partner_tid); 
+
+        if (local_tid < partner_tid) {
+            myVal = isAscending ? (myVal < partner_val ? myVal : partner_val)
+                                : (myVal > partner_val ? myVal : partner_val);
         } else {
-            myVal = isAscending ? (myVal > partnerVal ? myVal : partnerVal)
-                                : (myVal < partnerVal ? myVal : partnerVal);
+            myVal = isAscending ? (myVal > partner_val ? myVal : partner_val)
+                                : (myVal < partner_val ? myVal : partner_val);
         }
-        sharedData[local_tid] = myVal;
-        // No __syncthreads necessary for warp-level operations.
     }
 
     // Write sorted data back to global memory.
     if (tid < size) {
-        data[tid] = sharedData[local_tid];
+        data[tid] = myVal;
     }
 }
 
@@ -135,27 +133,22 @@ __global__ void intraBlockSortShared(int *data, size_t size, int max_intra_block
             __syncthreads();
         }
 
-        int val = sharedData[local_tid];
+        int myVal = sharedData[local_tid];
         for (; distance > 0; distance >>= 1) {
             int partner_tid = local_tid ^ distance;
-            int partner_val = __shfl_sync(0xFFFFFFFF, val, partner_tid);
+            int partner_val = __shfl_sync(0xFFFFFFFF, myVal, partner_tid);
 
-            if (isAscending) {
-                if (local_tid < partner_tid) {
-                    val = min(val, partner_val);
-                } else {
-                    val = max(val, partner_val);
-                }
+            if (local_tid < partner_tid) {
+                myVal = isAscending ? (myVal < partner_val ? myVal : partner_val)
+                                    : (myVal > partner_val ? myVal : partner_val);
             } else {
-                if (local_tid < partner_tid) {
-                    val = max(val, partner_val);
-                } else {
-                    val = min(val, partner_val);
-                }
+                myVal = isAscending ? (myVal > partner_val ? myVal : partner_val)
+                                    : (myVal < partner_val ? myVal : partner_val);
             }
+
         }
 
-        sharedData[local_tid] = val;
+        sharedData[local_tid] = myVal;
         __syncthreads();
     }
 

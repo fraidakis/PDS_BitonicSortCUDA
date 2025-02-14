@@ -8,15 +8,15 @@
 ╔════════════════════════════════════════════╗
 ║            CUDA Profiling Results          ║
 ╠════════════════════════════════════════════╣
-║  Total GPU Execution Time: 0.207776 ms     ║
+║  Total GPU Execution Time: 0.200640 ms     ║
 ╠══════════════════════════════════════════════════════════════════════════════════════════════╣
 ║    Time(%)         Time  Calls          Avg          Min          Max  Name                  ║
 ╟──────────────────────────────────────────────────────────────────────────────────────────────╢
-║     30.27%      33.66us     15       2.24us       2.18us       2.62us  compareSwapV0         ║
-║     23.86%      26.53us      1      26.53us      26.53us      26.53us  intraBlockSortShared  ║
-║     23.77%      26.43us      5       5.29us       5.22us       5.57us  intraBlockMergeShared ║
-║     12.35%      13.73us      1      13.73us      13.73us      13.73us  [CUDA memcpy HtoD]    ║
-║      9.76%      10.85us      1      10.85us      10.85us      10.85us  [CUDA memcpy DtoH]    ║
+║     32.09%      33.63us     15       2.24us       2.18us       2.59us  compareSwapV0         ║
+║     24.79%      25.98us      5       5.20us       5.15us       5.34us  intraBlockMergeShared ║
+║     19.85%      20.80us      1      20.80us      20.80us      20.80us  intraBlockSortShared  ║
+║     12.92%      13.54us      1      13.54us      13.54us      13.54us  [CUDA memcpy HtoD]    ║
+║     10.35%      10.85us      1      10.85us      10.85us      10.85us  [CUDA memcpy DtoH]    ║
 ╚══════════════════════════════════════════════════════════════════════════════════════════════╝
 
 
@@ -27,15 +27,15 @@
 ╔════════════════════════════════════════════╗
 ║            CUDA Profiling Results          ║
 ╠════════════════════════════════════════════╣
-║  Total GPU Execution Time: 0.290720 ms     ║
+║  Total GPU Execution Time: 0.277856 ms     ║
 ╠══════════════════════════════════════════════════════════════════════════════════════════════╣
 ║    Time(%)         Time  Calls          Avg          Min          Max  Name                  ║
 ╟──────────────────────────────────────────────────────────────────────────────────────────────╢
-║     28.14%      55.14us     21       2.62us       2.40us       3.17us  compareSwapV0         ║
-║     24.79%      48.58us      6       8.10us       8.00us       8.42us  intraBlockMergeShared ║
-║     24.17%      47.36us      1      47.36us      47.36us      47.36us  intraBlockSortShared  ║
-║     12.28%      24.06us      1      24.06us      24.06us      24.06us  [CUDA memcpy HtoD]    ║
-║     10.63%      20.83us      1      20.83us      20.83us      20.83us  [CUDA memcpy DtoH]    ║
+║     30.03%      55.39us     21       2.64us       2.43us       3.23us  compareSwapV0         ║
+║     25.95%      47.87us      6       7.98us       7.87us       8.13us  intraBlockMergeShared ║
+║     19.58%      36.13us      1      36.13us      36.13us      36.13us  intraBlockSortShared  ║
+║     13.15%      24.26us      1      24.26us      24.26us      24.26us  [CUDA memcpy HtoD]    ║
+║     11.29%      20.83us      1      20.83us      20.83us      20.83us  [CUDA memcpy DtoH]    ║
 ╚══════════════════════════════════════════════════════════════════════════════════════════════╝
 
 
@@ -46,15 +46,15 @@
 ╔════════════════════════════════════════════╗
 ║            CUDA Profiling Results          ║
 ╠════════════════════════════════════════════╣
-║  Total GPU Execution Time: 0.424320 ms     ║
+║  Total GPU Execution Time: 0.405952 ms     ║
 ╠══════════════════════════════════════════════════════════════════════════════════════════════╣
 ║    Time(%)         Time  Calls          Avg          Min          Max  Name                  ║
 ╟──────────────────────────────────────────────────────────────────────────────────────────────╢
-║     26.68%      85.70us     28       3.06us       2.85us       3.78us  compareSwapV0         ║
-║     25.06%      80.51us      7      11.50us      11.36us      11.84us  intraBlockMergeShared ║
-║     21.33%      68.51us      1      68.51us      68.51us      68.51us  intraBlockSortShared  ║
-║     14.11%      45.31us      1      45.31us      45.31us      45.31us  [CUDA memcpy HtoD]    ║
-║     12.82%      41.18us      1      41.18us      41.18us      41.18us  [CUDA memcpy DtoH]    ║
+║     28.10%      85.70us     28       3.06us       2.91us       3.71us  compareSwapV0         ║
+║     26.24%      80.03us      7      11.43us      11.33us      11.84us  intraBlockMergeShared ║
+║     17.41%      53.09us      1      53.09us      53.09us      53.09us  intraBlockSortShared  ║
+║     14.84%      45.25us      1      45.25us      45.25us      45.25us  [CUDA memcpy HtoD]    ║
+║     13.41%      40.90us      1      40.90us      40.90us      40.90us  [CUDA memcpy DtoH]    ║
 ╚══════════════════════════════════════════════════════════════════════════════════════════════╝
 
 
@@ -65,15 +65,15 @@
 ╔════════════════════════════════════════════╗
 ║            CUDA Profiling Results          ║
 ╠════════════════════════════════════════════╣
-║  Total GPU Execution Time: 0.719104 ms     ║
+║  Total GPU Execution Time: 0.687264 ms     ║
 ╠══════════════════════════════════════════════════════════════════════════════════════════════╣
 ║    Time(%)         Time  Calls          Avg          Min          Max  Name                  ║
 ╟──────────────────────────────────────────────────────────────────────────────────────────────╢
-║     28.44%     170.50us     36       4.74us       4.35us       5.34us  compareSwapV0         ║
-║     24.60%     147.46us      8      18.43us      18.34us      18.72us  intraBlockMergeShared ║
-║     18.97%     113.70us      1     113.70us     113.70us     113.70us  intraBlockSortShared  ║
-║     14.55%      87.23us      1      87.23us      87.23us      87.23us  [CUDA memcpy HtoD]    ║
-║     13.45%      80.61us      1      80.61us      80.61us      80.61us  [CUDA memcpy DtoH]    ║
+║     29.95%     171.26us     36       4.76us       4.35us       5.50us  compareSwapV0         ║
+║     25.46%     145.60us      8      18.20us      18.11us      18.46us  intraBlockMergeShared ║
+║     15.33%      87.68us      1      87.68us      87.68us      87.68us  [CUDA memcpy HtoD]    ║
+║     15.16%      86.69us      1      86.69us      86.69us      86.69us  intraBlockSortShared  ║
+║     14.09%      80.54us      1      80.54us      80.54us      80.54us  [CUDA memcpy DtoH]    ║
 ╚══════════════════════════════════════════════════════════════════════════════════════════════╝
 
 
@@ -84,15 +84,15 @@
 ╔════════════════════════════════════════════╗
 ║            CUDA Profiling Results          ║
 ╠════════════════════════════════════════════╣
-║  Total GPU Execution Time: 1.339232 ms     ║
+║  Total GPU Execution Time: 1.283424 ms     ║
 ╠══════════════════════════════════════════════════════════════════════════════════════════════╣
 ║    Time(%)         Time  Calls          Avg          Min          Max  Name                  ║
 ╟──────────────────────────────────────────────────────────────────────────────────────────────╢
-║     28.47%     344.64us     45       7.66us       7.42us       8.06us  compareSwapV0         ║
-║     26.22%     317.41us      9      35.27us      34.94us      35.58us  intraBlockMergeShared ║
-║     18.00%     217.95us      1     217.95us     217.95us     217.95us  intraBlockSortShared  ║
-║     14.13%     171.04us      1     171.04us     171.04us     171.04us  [CUDA memcpy HtoD]    ║
-║     13.18%     159.55us      1     159.55us     159.55us     159.55us  [CUDA memcpy DtoH]    ║
+║     29.81%     344.48us     45       7.66us       7.36us       8.32us  compareSwapV0         ║
+║     26.92%     311.07us      9      34.56us      34.24us      34.85us  intraBlockMergeShared ║
+║     14.80%     171.07us      1     171.07us     171.07us     171.07us  [CUDA memcpy HtoD]    ║
+║     14.66%     169.38us      1     169.38us     169.38us     169.38us  intraBlockSortShared  ║
+║     13.81%     159.55us      1     159.55us     159.55us     159.55us  [CUDA memcpy DtoH]    ║
 ╚══════════════════════════════════════════════════════════════════════════════════════════════╝
 
 
@@ -103,15 +103,15 @@
 ╔════════════════════════════════════════════╗
 ║            CUDA Profiling Results          ║
 ╠════════════════════════════════════════════╣
-║  Total GPU Execution Time: 2.904448 ms     ║
+║  Total GPU Execution Time: 2.790944 ms     ║
 ╠══════════════════════════════════════════════════════════════════════════════════════════════╣
 ║    Time(%)         Time  Calls          Avg          Min          Max  Name                  ║
 ╟──────────────────────────────────────────────────────────────────────────────────────────────╢
-║     35.91%     992.45us     55      18.04us      16.51us      20.13us  compareSwapV0         ║
-║     24.98%     690.50us     10      69.05us      68.38us      69.44us  intraBlockMergeShared ║
-║     15.28%     422.30us      1     422.30us     422.30us     422.30us  intraBlockSortShared  ║
-║     12.29%     339.81us      1     339.81us     339.81us     339.81us  [CUDA memcpy HtoD]    ║
-║     11.54%     318.94us      1     318.94us     318.94us     318.94us  [CUDA memcpy DtoH]    ║
+║     37.56%     991.42us     55      18.02us      17.18us      20.54us  compareSwapV0         ║
+║     25.47%     672.48us     10      67.25us      66.34us      68.26us  intraBlockMergeShared ║
+║     12.87%     339.71us      1     339.71us     339.71us     339.71us  [CUDA memcpy HtoD]    ║
+║     12.15%     320.74us      1     320.74us     320.74us     320.74us  [CUDA memcpy DtoH]    ║
+║     11.95%     315.46us      1     315.46us     315.46us     315.46us  intraBlockSortShared  ║
 ╚══════════════════════════════════════════════════════════════════════════════════════════════╝
 
 
@@ -122,15 +122,15 @@
 ╔════════════════════════════════════════════╗
 ║            CUDA Profiling Results          ║
 ╠════════════════════════════════════════════╣
-║  Total GPU Execution Time: 5.956800 ms     ║
+║  Total GPU Execution Time: 5.756064 ms     ║
 ╠══════════════════════════════════════════════════════════════════════════════════════════════╣
 ║    Time(%)         Time  Calls          Avg          Min          Max  Name                  ║
 ╟──────────────────────────────────────────────────────────────────────────────────────────────╢
-║     38.77%       2.25ms     66      34.03us      30.94us      40.38us  compareSwapV0         ║
-║     24.70%       1.43ms     11     130.09us     129.38us     130.85us  intraBlockMergeShared ║
-║     13.86%     802.85us      1     802.85us     802.85us     802.85us  intraBlockSortShared  ║
-║     11.68%     676.80us      1     676.80us     676.80us     676.80us  [CUDA memcpy HtoD]    ║
-║     10.99%     636.77us      1     636.77us     636.77us     636.77us  [CUDA memcpy DtoH]    ║
+║     40.13%       2.25ms     66      34.05us      31.26us      40.26us  compareSwapV0         ║
+║     25.39%       1.42ms     11     129.28us     128.70us     129.89us  intraBlockMergeShared ║
+║     12.08%     676.35us      1     676.35us     676.35us     676.35us  [CUDA memcpy HtoD]    ║
+║     11.43%     640.19us      1     640.19us     640.19us     640.19us  [CUDA memcpy DtoH]    ║
+║     10.97%     614.14us      1     614.14us     614.14us     614.14us  intraBlockSortShared  ║
 ╚══════════════════════════════════════════════════════════════════════════════════════════════╝
 
 
@@ -141,15 +141,15 @@
 ╔════════════════════════════════════════════╗
 ║            CUDA Profiling Results          ║
 ╠════════════════════════════════════════════╣
-║  Total GPU Execution Time: 12.600064 ms    ║
+║  Total GPU Execution Time: 12.173280 ms    ║
 ╠══════════════════════════════════════════════════════════════════════════════════════════════╣
 ║    Time(%)         Time  Calls          Avg          Min          Max  Name                  ║
 ╟──────────────────────────────────────────────────────────────────────────────────────────────╢
-║     41.29%       5.13ms     78      65.79us      55.26us      81.09us  compareSwapV0         ║
-║     24.76%       3.08ms     12     256.45us     255.71us     257.28us  intraBlockMergeShared ║
-║     12.85%       1.60ms      1       1.60ms       1.60ms       1.60ms  intraBlockSortShared  ║
-║     10.87%       1.35ms      1       1.35ms       1.35ms       1.35ms  [CUDA memcpy HtoD]    ║
-║     10.23%       1.27ms      1       1.27ms       1.27ms       1.27ms  [CUDA memcpy DtoH]    ║
+║     42.72%       5.13ms     78      65.72us      55.68us      81.44us  compareSwapV0         ║
+║     25.24%       3.03ms     12     252.35us     251.52us     253.31us  intraBlockMergeShared ║
+║     11.25%       1.35ms      1       1.35ms       1.35ms       1.35ms  [CUDA memcpy HtoD]    ║
+║     10.68%       1.28ms      1       1.28ms       1.28ms       1.28ms  [CUDA memcpy DtoH]    ║
+║     10.11%       1.21ms      1       1.21ms       1.21ms       1.21ms  intraBlockSortShared  ║
 ╚══════════════════════════════════════════════════════════════════════════════════════════════╝
 
 
@@ -160,15 +160,15 @@
 ╔════════════════════════════════════════════╗
 ║            CUDA Profiling Results          ║
 ╠════════════════════════════════════════════╣
-║  Total GPU Execution Time: 26.994495 ms    ║
+║  Total GPU Execution Time: 26.086945 ms    ║
 ╠══════════════════════════════════════════════════════════════════════════════════════════════╣
 ║    Time(%)         Time  Calls          Avg          Min          Max  Name                  ║
 ╟──────────────────────────────────────────────────────────────────────────────────────────────╢
-║     43.98%      11.78ms     91     129.47us     103.30us     160.86us  compareSwapV0         ║
-║     24.60%       6.59ms     13     507.00us     505.79us     507.78us  intraBlockMergeShared ║
-║     11.86%       3.18ms      1       3.18ms       3.18ms       3.18ms  intraBlockSortShared  ║
-║     10.07%       2.70ms      1       2.70ms       2.70ms       2.70ms  [CUDA memcpy HtoD]    ║
-║      9.49%       2.54ms      1       2.54ms       2.54ms       2.54ms  [CUDA memcpy DtoH]    ║
+║     45.44%      11.77ms     91     129.29us     103.42us     160.58us  compareSwapV0         ║
+║     25.00%       6.47ms     13     497.89us     496.06us     499.14us  intraBlockMergeShared ║
+║     10.42%       2.70ms      1       2.70ms       2.70ms       2.70ms  [CUDA memcpy HtoD]    ║
+║      9.86%       2.55ms      1       2.55ms       2.55ms       2.55ms  [CUDA memcpy DtoH]    ║
+║      9.28%       2.40ms      1       2.40ms       2.40ms       2.40ms  intraBlockSortShared  ║
 ╚══════════════════════════════════════════════════════════════════════════════════════════════╝
 
 
@@ -179,15 +179,15 @@
 ╔════════════════════════════════════════════╗
 ║            CUDA Profiling Results          ║
 ╠════════════════════════════════════════════╣
-║  Total GPU Execution Time: 58.104576 ms    ║
+║  Total GPU Execution Time: 56.498302 ms    ║
 ╠══════════════════════════════════════════════════════════════════════════════════════════════╣
 ║    Time(%)         Time  Calls          Avg          Min          Max  Name                  ║
 ╟──────────────────────────────────────────────────────────────────────────────────────────────╢
-║     46.83%      27.11ms    105     258.17us     199.30us     316.10us  compareSwapV0         ║
-║     24.20%      14.01ms     14       1.00ms     999.13us       1.00ms  intraBlockMergeShared ║
-║     10.87%       6.29ms      1       6.29ms       6.29ms       6.29ms  intraBlockSortShared  ║
-║      9.32%       5.39ms      1       5.39ms       5.39ms       5.39ms  [CUDA memcpy HtoD]    ║
-║      8.78%       5.08ms      1       5.08ms       5.08ms       5.08ms  [CUDA memcpy DtoH]    ║
+║     48.17%      27.11ms    105     258.17us     199.55us     315.97us  compareSwapV0         ║
+║     24.66%      13.88ms     14     991.13us     989.44us     993.57us  intraBlockMergeShared ║
+║      9.58%       5.39ms      1       5.39ms       5.39ms       5.39ms  [CUDA memcpy HtoD]    ║
+║      9.07%       5.11ms      1       5.11ms       5.11ms       5.11ms  [CUDA memcpy DtoH]    ║
+║      8.52%       4.79ms      1       4.79ms       4.79ms       4.79ms  intraBlockSortShared  ║
 ╚══════════════════════════════════════════════════════════════════════════════════════════════╝
 
 
@@ -198,15 +198,15 @@
 ╔════════════════════════════════════════════╗
 ║            CUDA Profiling Results          ║
 ╠════════════════════════════════════════════╣
-║  Total GPU Execution Time: 125.949821 ms   ║
+║  Total GPU Execution Time: 121.872734 ms   ║
 ╠══════════════════════════════════════════════════════════════════════════════════════════════╣
 ║    Time(%)         Time  Calls          Avg          Min          Max  Name                  ║
 ╟──────────────────────────────────────────────────────────────────────────────────────────────╢
-║     49.46%      62.15ms    120     517.88us     391.74us     624.19us  compareSwapV0         ║
-║     23.84%      29.95ms     15       2.00ms       1.99ms       2.00ms  intraBlockMergeShared ║
-║     10.02%      12.60ms      1      12.60ms      12.60ms      12.60ms  intraBlockSortShared  ║
-║      8.58%      10.79ms      1      10.79ms      10.79ms      10.79ms  [CUDA memcpy HtoD]    ║
-║      8.09%      10.17ms      1      10.17ms      10.17ms      10.17ms  [CUDA memcpy DtoH]    ║
+║     50.84%      61.82ms    120     515.14us     375.17us     623.49us  compareSwapV0         ║
+║     24.02%      29.20ms     15       1.95ms       1.83ms       1.98ms  intraBlockMergeShared ║
+║      8.87%      10.79ms      1      10.79ms      10.79ms      10.79ms  [CUDA memcpy HtoD]    ║
+║      8.40%      10.21ms      1      10.21ms      10.21ms      10.21ms  [CUDA memcpy DtoH]    ║
+║      7.87%       9.57ms      1       9.57ms       9.57ms       9.57ms  intraBlockSortShared  ║
 ╚══════════════════════════════════════════════════════════════════════════════════════════════╝
 
 
@@ -217,15 +217,15 @@
 ╔════════════════════════════════════════════╗
 ║            CUDA Profiling Results          ║
 ╠════════════════════════════════════════════╣
-║  Total GPU Execution Time: 262.503113 ms   ║
+║  Total GPU Execution Time: 256.729919 ms   ║
 ╠══════════════════════════════════════════════════════════════════════════════════════════════╣
 ║    Time(%)         Time  Calls          Avg          Min          Max  Name                  ║
 ╟──────────────────────────────────────────────────────────────────────────────────────────────╢
-║     53.13%     139.31ms    136       1.02ms     739.90us       1.22ms  compareSwapV0         ║
-║     22.20%      58.20ms     16       3.64ms       3.63ms       3.68ms  intraBlockMergeShared ║
-║      8.69%      22.77ms      1      22.77ms      22.77ms      22.77ms  intraBlockSortShared  ║
-║      8.23%      21.57ms      1      21.57ms      21.57ms      21.57ms  [CUDA memcpy HtoD]    ║
-║      7.76%      20.34ms      1      20.34ms      20.34ms      20.34ms  [CUDA memcpy DtoH]    ║
+║     54.36%     139.38ms    136       1.02ms     740.00us       1.22ms  compareSwapV0         ║
+║     22.50%      57.70ms     16       3.61ms       3.59ms       3.64ms  intraBlockMergeShared ║
+║      8.41%      21.57ms      1      21.57ms      21.57ms      21.57ms  [CUDA memcpy HtoD]    ║
+║      7.95%      20.40ms      1      20.40ms      20.40ms      20.40ms  [CUDA memcpy DtoH]    ║
+║      6.77%      17.36ms      1      17.36ms      17.36ms      17.36ms  intraBlockSortShared  ║
 ╚══════════════════════════════════════════════════════════════════════════════════════════════╝
 
 
@@ -236,15 +236,15 @@
 ╔════════════════════════════════════════════╗
 ║            CUDA Profiling Results          ║
 ╠════════════════════════════════════════════╣
-║  Total GPU Execution Time: 568.943726 ms   ║
+║  Total GPU Execution Time: 556.737549 ms   ║
 ╠══════════════════════════════════════════════════════════════════════════════════════════════╣
 ║    Time(%)         Time  Calls          Avg          Min          Max  Name                  ║
 ╟──────────────────────────────────────────────────────────────────────────────────────────────╢
-║     55.46%     315.34ms    153       2.06ms       1.46ms       2.42ms  compareSwapV0         ║
-║     21.80%     123.93ms     17       7.29ms       7.27ms       7.31ms  intraBlockMergeShared ║
-║      7.99%      45.45ms      1      45.45ms      45.45ms      45.45ms  intraBlockSortShared  ║
-║      7.59%      43.15ms      1      43.15ms      43.15ms      43.15ms  [CUDA memcpy HtoD]    ║
-║      7.16%      40.68ms      1      40.68ms      40.68ms      40.68ms  [CUDA memcpy DtoH]    ║
+║     56.68%     315.30ms    153       2.06ms       1.46ms       2.42ms  compareSwapV0         ║
+║     22.02%     122.52ms     17       7.21ms       7.19ms       7.22ms  intraBlockMergeShared ║
+║      7.75%      43.13ms      1      43.13ms      43.13ms      43.13ms  [CUDA memcpy HtoD]    ║
+║      7.32%      40.74ms      1      40.74ms      40.74ms      40.74ms  [CUDA memcpy DtoH]    ║
+║      6.22%      34.63ms      1      34.63ms      34.63ms      34.63ms  intraBlockSortShared  ║
 ╚══════════════════════════════════════════════════════════════════════════════════════════════╝
 
 
@@ -255,15 +255,15 @@
 ╔════════════════════════════════════════════╗
 ║            CUDA Profiling Results          ║
 ╠════════════════════════════════════════════╣
-║  Total GPU Execution Time: 1230.701294 ms  ║
+║  Total GPU Execution Time: 1206.233032 ms  ║
 ╠══════════════════════════════════════════════════════════════════════════════════════════════╣
 ║    Time(%)         Time  Calls          Avg          Min          Max  Name                  ║
 ╟──────────────────────────────────────────────────────────────────────────────────────────────╢
-║     57.69%     709.75ms    171       4.15ms       2.90ms       4.84ms  compareSwapV0         ║
-║     21.30%     262.02ms     18      14.56ms      14.51ms      14.61ms  intraBlockMergeShared ║
-║      7.39%      90.87ms      1      90.87ms      90.87ms      90.87ms  intraBlockSortShared  ║
-║      7.01%      86.26ms      1      86.26ms      86.26ms      86.26ms  [CUDA memcpy HtoD]    ║
-║      6.62%      81.39ms      1      81.39ms      81.39ms      81.39ms  [CUDA memcpy DtoH]    ║
+║     58.86%     709.72ms    171       4.15ms       2.90ms       4.84ms  compareSwapV0         ║
+║     21.50%     259.20ms     18      14.40ms      14.37ms      14.43ms  intraBlockMergeShared ║
+║      7.15%      86.26ms      1      86.26ms      86.26ms      86.26ms  [CUDA memcpy HtoD]    ║
+║      6.75%      81.40ms      1      81.40ms      81.40ms      81.40ms  [CUDA memcpy DtoH]    ║
+║      5.74%      69.24ms      1      69.24ms      69.24ms      69.24ms  intraBlockSortShared  ║
 ╚══════════════════════════════════════════════════════════════════════════════════════════════╝
 
 
@@ -274,15 +274,15 @@
 ╔════════════════════════════════════════════╗
 ║            CUDA Profiling Results          ║
 ╠════════════════════════════════════════════╣
-║  Total GPU Execution Time: 2657.632812 ms  ║
+║  Total GPU Execution Time: 2608.492432 ms  ║
 ╠══════════════════════════════════════════════════════════════════════════════════════════════╣
 ║    Time(%)         Time  Calls          Avg          Min          Max  Name                  ║
 ╟──────────────────────────────────────────────────────────────────────────────────────────────╢
-║     59.76%       1.592s    190       8.36ms       5.79ms       9.67ms  compareSwapV0         ║
-║     20.79%     552.31ms     19      29.07ms      28.98ms      29.19ms  intraBlockMergeShared ║
-║      6.84%     181.72ms      1     181.72ms     181.72ms     181.72ms  intraBlockSortShared  ║
-║      6.49%     172.51ms      1     172.51ms     172.51ms     172.51ms  [CUDA memcpy HtoD]    ║
-║      6.12%     162.73ms      1     162.73ms     162.73ms     162.73ms  [CUDA memcpy DtoH]    ║
+║     60.88%       1.593s    190       8.36ms       5.79ms       9.67ms  compareSwapV0         ║
+║     20.96%     546.54ms     19      28.77ms      28.65ms      28.85ms  intraBlockMergeShared ║
+║      6.61%     172.51ms      1     172.51ms     172.51ms     172.51ms  [CUDA memcpy HtoD]    ║
+║      6.24%     162.73ms      1     162.73ms     162.73ms     162.73ms  [CUDA memcpy DtoH]    ║
+║      5.31%     138.45ms      1     138.45ms     138.45ms     138.45ms  intraBlockSortShared  ║
 ╚══════════════════════════════════════════════════════════════════════════════════════════════╝
 
 
@@ -293,14 +293,14 @@
 ╔════════════════════════════════════════════╗
 ║            CUDA Profiling Results          ║
 ╠════════════════════════════════════════════╣
-║  Total GPU Execution Time: 5725.943848 ms  ║
+║  Total GPU Execution Time: 5626.794434 ms  ║
 ╠══════════════════════════════════════════════════════════════════════════════════════════════╣
 ║    Time(%)         Time  Calls          Avg          Min          Max  Name                  ║
 ╟──────────────────────────────────────────────────────────────────────────────────────────────╢
-║     61.67%       3.537s    210      16.81ms      11.57ms      19.35ms  compareSwapV0         ║
-║     20.25%       1.165s     20      57.97ms      57.95ms      58.01ms  intraBlockMergeShared ║
-║      6.37%     364.56ms      1     364.56ms     364.56ms     364.56ms  intraBlockSortShared  ║
-║      6.03%     345.05ms      1     345.05ms     345.05ms     345.05ms  [CUDA memcpy HtoD]    ║
-║      5.69%     325.55ms      1     325.55ms     325.55ms     325.55ms  [CUDA memcpy DtoH]    ║
+║     62.76%       3.536s    210      16.81ms      11.57ms      19.35ms  compareSwapV0         ║
+║     20.40%       1.151s     20      57.38ms      57.28ms      57.59ms  intraBlockMergeShared ║
+║      6.13%     345.11ms      1     345.11ms     345.11ms     345.11ms  [CUDA memcpy HtoD]    ║
+║      5.78%     325.39ms      1     325.39ms     325.39ms     325.39ms  [CUDA memcpy DtoH]    ║
+║      4.93%     277.33ms      1     277.33ms     277.33ms     277.33ms  intraBlockSortShared  ║
 ╚══════════════════════════════════════════════════════════════════════════════════════════════╝
 
