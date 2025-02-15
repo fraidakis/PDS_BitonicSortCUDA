@@ -23,13 +23,34 @@ int compareAscending(const void *a, const void *b)
     return (*(int *)a - *(int *)b);
 }
 
-// Inline device function to swap two integers
-// __forceinline__ suggests the compiler to inline this function for performance
-// __device__ specifies that this function runs on the GPU
+/* 
+    Function to swap two integer values
+    This function is used to swap two integer values
+*/
 __device__ __forceinline__ void swap(int &a, int &b) {
     int temp = a;
     a = b;
     b = temp;
+}
+
+/* 
+    Function to perform a wrap merge operation within a warp
+    This function is used to merge elements within a warp using shuffle operations
+*/
+__device__ __forceinline__ int intraWrapMerge(int myVal, bool isAscending, int local_tid, int distance) {
+
+    for (; distance > 0; distance >>= 1) {
+        int partner_tid = local_tid ^ distance;
+        int partner_val = __shfl_sync(0xFFFFFFFF, myVal, partner_tid);
+        if (local_tid < partner_tid) {
+            myVal = isAscending ? (myVal < partner_val ? myVal : partner_val)
+                                : (myVal > partner_val ? myVal : partner_val);
+        } else {
+            myVal = isAscending ? (myVal > partner_val ? myVal : partner_val)
+                                : (myVal < partner_val ? myVal : partner_val);
+        }
+    }
+    return myVal;
 }
 
 // Kernel for merging sorted sequences within a CUDA block using shared memory
@@ -63,24 +84,9 @@ __global__ void intraBlockMergeShared(int *data, size_t size, int dimension, int
         __syncthreads();
     }
 
-    // Second loop: for distances < warpSize using __shfl_sync
-    int myVal = sharedData[local_tid];  // Load once into a register
-    for (int distance = warpSize >> 1; distance > 0; distance >>= 1) {
-        int partner_tid = local_tid ^ distance;
-        int partner_val = __shfl_sync(0xFFFFFFFF, myVal, partner_tid); 
-
-        if (local_tid < partner_tid) {
-            myVal = isAscending ? (myVal < partner_val ? myVal : partner_val)
-                                : (myVal > partner_val ? myVal : partner_val);
-        } else {
-            myVal = isAscending ? (myVal > partner_val ? myVal : partner_val)
-                                : (myVal < partner_val ? myVal : partner_val);
-        }
-    }
-
     // Write sorted data back to global memory.
     if (tid < size) {
-        data[tid] = myVal;
+        data[tid] = intraWrapMerge(sharedData[local_tid], isAscending, local_tid, warpSize/2);
     }
 }
 
@@ -123,7 +129,7 @@ __global__ void intraBlockSortShared(int *data, size_t size, int max_intra_block
 
         int initial_distance = 1 << (dimension - 1);
         int distance;
-        for (distance = initial_distance; distance > 16; distance >>= 1) {
+        for (distance = initial_distance; distance >= warpSize; distance >>= 1) {
             int partner = local_tid ^ distance;
             if (partner > local_tid) {
                 if ((sharedData[local_tid] > sharedData[partner]) == isAscending) {
@@ -133,22 +139,7 @@ __global__ void intraBlockSortShared(int *data, size_t size, int max_intra_block
             __syncthreads();
         }
 
-        int myVal = sharedData[local_tid];
-        for (; distance > 0; distance >>= 1) {
-            int partner_tid = local_tid ^ distance;
-            int partner_val = __shfl_sync(0xFFFFFFFF, myVal, partner_tid);
-
-            if (local_tid < partner_tid) {
-                myVal = isAscending ? (myVal < partner_val ? myVal : partner_val)
-                                    : (myVal > partner_val ? myVal : partner_val);
-            } else {
-                myVal = isAscending ? (myVal > partner_val ? myVal : partner_val)
-                                    : (myVal < partner_val ? myVal : partner_val);
-            }
-
-        }
-
-        sharedData[local_tid] = myVal;
+        sharedData[local_tid] = intraWrapMerge(sharedData[local_tid], isAscending, local_tid, distance);
         __syncthreads();
     }
 
