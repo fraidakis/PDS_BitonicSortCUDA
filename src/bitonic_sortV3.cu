@@ -38,17 +38,15 @@ __device__ __forceinline__ void swap(int &a, int &b) {
     This function is used to merge elements within a warp using shuffle operations
 */
 __device__ __forceinline__ int intraWrapMerge(int myVal, bool isAscending, int local_tid, int distance) {
-
     for (; distance > 0; distance >>= 1) {
         int partner_tid = local_tid ^ distance;
         int partner_val = __shfl_sync(0xFFFFFFFF, myVal, partner_tid);
-        if (local_tid < partner_tid) {
-            myVal = isAscending ? (myVal < partner_val ? myVal : partner_val)
-                                : (myVal > partner_val ? myVal : partner_val);
-        } else {
-            myVal = isAscending ? (myVal > partner_val ? myVal : partner_val)
-                                : (myVal < partner_val ? myVal : partner_val);
-        }
+        
+        // Substituting the conditional swap with arithmetic operations to avoid branching
+        bool pred = (local_tid < partner_tid) == isAscending;
+        int min_val = min(myVal, partner_val);
+        int max_val = max(myVal, partner_val);
+        myVal = pred ? min_val : max_val;
     }
     return myVal;
 }
@@ -94,23 +92,44 @@ __global__ void intraBlockMergeShared(int *data, size_t size, int dimension, int
 // Handles comparisons between elements in different blocks
 __global__ void compareSwapV0(int *data, size_t size, int dimension, int distance)
 {
-    // Calculate global thread ID
-    int tid = threadIdx.x + blockIdx.x * blockDim.x; // Global thread ID
-    // Calculate partner thread ID using XOR operation
-    int partner = tid ^ distance;                    // XOR operation to find partner (bitwise complement)
-    // Determine the sorting order based on the bit at position 'dimension' in the thread ID
+    int i = threadIdx.x + blockIdx.x * blockDim.x; // Global reduced thread ID
+
+    if (i >= size / 2) return; // We launch only size/2 threads
+
+    // Compute log2(distance) using __ffs (find-first-set) intrinsic.
+    // Since distance is a power of 2, __ffs(distance) returns log2(distance) + 1.
+    int log_d = __ffs(distance) - 1;
+
+    // Key idea: For each phase, valid comparisons are performed on indices 
+    // in the first half of each block of 2*distance elements. 
+    // We want to map our reduced thread index (i in [0, size/2)) to an actual array index (tid)
+    // that is in the lower half of its 2*distance block.
+    //
+    // Here’s how the mapping works:
+
+    // 1. Compute the “group” of indices: each group has size = 2*distance.
+    //    The group index is given by dividing i by distance.
+    int group = i >> log_d;  // equivalent to i / distance.
+
+    // 2. Compute the offset within that group. Since there are exactly 'distance' indices
+    //    in the first half of a group, we take i mod distance.
+    int offset = i & ((1 << log_d) - 1); // equivalent to i % distance.
+
+    // 3. Compute the full index (tid) in the original array:
+    //    Each group starts at index: group * (2 * distance) and then add the offset.
+    int tid = group * (2 * distance) + offset;
+
+    // Following remains the same as in compareSwapV0
+    int partner = tid ^ distance;
+
     bool isAscending = (tid & (1 << dimension)) == 0;
 
-    // Only process valid pairs where partner has higher index
-    if (tid < size && partner > tid)
+    if ((data[tid] > data[partner]) == isAscending)
     {
-        // Compare and swap elements if they are not in the correct order
-        if ((data[tid] > data[partner]) == isAscending)
-        {
-            swap(data[tid], data[partner]); // Use inline swap
-        }
+        swap(data[tid], data[partner]);
     }
 }
+
 
 // Kernel for sorting elements within each block using shared memory
 // Implements the first phase of bitonic sort within block boundaries
@@ -127,9 +146,8 @@ __global__ void intraBlockSortShared(int *data, size_t size, int max_intra_block
     for(int dimension = 1; dimension <= max_intra_block_dimension; dimension++) {
         bool isAscending = (tid & (1 << dimension)) == 0;
 
-        int initial_distance = 1 << (dimension - 1);
         int distance;
-        for (distance = initial_distance; distance >= warpSize; distance >>= 1) {
+        for (distance = 1 << (dimension - 1); distance >= warpSize; distance >>= 1) {
             int partner = local_tid ^ distance;
             if (partner > local_tid) {
                 if ((sharedData[local_tid] > sharedData[partner]) == isAscending) {
@@ -166,20 +184,25 @@ void bitonicSortV2(int *array, size_t size) {
 
     cudaEventRecord(start);  // Start timing
 
-    /************************************************************************/  
+    /************************************************************************/
 
     // Copy data from host to device
     cudaMemcpy(devArray, array, size * sizeof(int), cudaMemcpyHostToDevice);
 
-    // Configure kernel launch parameters
-    int maxThreadsPerBlock = deviceProp.maxThreadsPerBlock; // Typically 1024
-    dim3 threadsPerBlock(min(static_cast<size_t>(size), static_cast<size_t>(maxThreadsPerBlock)));
 
-    // Calculate grid size
-    int maxGridSize = deviceProp.maxGridSize[0]; // Typically 65535
+    // Configure kernel launch parameters
+    // Configure kernel launch parameters
+    int maxThreadsPerBlock = deviceProp.maxThreadsPerBlock;
+    size_t requiredThreads = size / 2;  // We need size/2 threads for compareSwap
+
+    dim3 threadsPerBlock(min(requiredThreads, static_cast<size_t>(maxThreadsPerBlock)));
+    // For compareSwap kernels
+    dim3 blocksPerGridCompareSwap(requiredThreads / threadsPerBlock.x);
+    // For other kernels
     dim3 blocksPerGrid((size + threadsPerBlock.x - 1) / threadsPerBlock.x);
+    
     // Check if the grid size exceeds the maximum allowed size
-    if (blocksPerGrid.x > maxGridSize) {
+    if (blocksPerGrid.x > deviceProp.maxGridSize[0]) {
         printf("Error: Exceeded maximum grid size\n");
         return;
     }
@@ -198,12 +221,13 @@ void bitonicSortV2(int *array, size_t size) {
         // Perform compare-and-swap operations for distances greater than max_intra_block_distance
         for(int distance = 1 << (dimension-1); distance > max_intra_block_distance; distance >>= 1) 
         {
-            compareSwapV0<<<blocksPerGrid, threadsPerBlock>>>(devArray, size, dimension, distance);
+            compareSwapV0<<<blocksPerGridCompareSwap, threadsPerBlock>>>(devArray, size, dimension, distance);
         }
 
         // Merge sorted sequences within each block using shared memory
         intraBlockMergeShared<<<blocksPerGrid, threadsPerBlock, threadsPerBlock.x * sizeof(int)>>>(devArray, size, dimension, max_intra_block_distance);
     }
+
 
     // Copy sorted data from device to host
     cudaMemcpy(array, devArray, size * sizeof(int), cudaMemcpyDeviceToHost);
