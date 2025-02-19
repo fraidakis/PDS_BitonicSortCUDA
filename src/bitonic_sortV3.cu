@@ -1,6 +1,8 @@
-// Added pinned memory allocation for the input array in main function
-// Added __shfl_sync for distances < warpSize in intraBlock kernels
-
+/** 
+    Added pinned memory allocation for the input array in main function
+    Added __shfl_sync for distances < warpSize in intraBlock kernels
+    Optimized the compareSwapV0 kernel to reduce the number of launched threads
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -37,7 +39,7 @@ __device__ __forceinline__ void swap(int &a, int &b) {
     Function to perform a wrap merge operation within a warp
     This function is used to merge elements within a warp using shuffle operations
 */
-__device__ __forceinline__ int intraWrapMerge(int myVal, bool isAscending, int local_tid, int distance) {
+__device__ __forceinline__ int intraWarpMerge(int myVal, bool isAscending, int local_tid, int distance) {
     for (; distance > 0; distance >>= 1) {
         int partner_tid = local_tid ^ distance;
         int partner_val = __shfl_sync(0xFFFFFFFF, myVal, partner_tid);
@@ -84,7 +86,7 @@ __global__ void intraBlockMergeShared(int *data, size_t size, int dimension, int
 
     // Write sorted data back to global memory.
     if (tid < size) {
-        data[tid] = intraWrapMerge(sharedData[local_tid], isAscending, local_tid, warpSize/2);
+        data[tid] = intraWarpMerge(sharedData[local_tid], isAscending, local_tid, warpSize/2);
     }
 }
 
@@ -157,7 +159,7 @@ __global__ void intraBlockSortShared(int *data, size_t size, int max_intra_block
             __syncthreads();
         }
 
-        sharedData[local_tid] = intraWrapMerge(sharedData[local_tid], isAscending, local_tid, distance);
+        sharedData[local_tid] = intraWarpMerge(sharedData[local_tid], isAscending, local_tid, distance);
         __syncthreads();
     }
 
@@ -190,17 +192,14 @@ void bitonicSortV2(int *array, size_t size) {
     cudaMemcpy(devArray, array, size * sizeof(int), cudaMemcpyHostToDevice);
 
 
-    // Configure kernel launch parameters
-    // Configure kernel launch parameters
     int maxThreadsPerBlock = deviceProp.maxThreadsPerBlock;
     size_t requiredThreads = size / 2;  // We need size/2 threads for compareSwap
 
-    dim3 threadsPerBlock(min(requiredThreads, static_cast<size_t>(maxThreadsPerBlock)));
-    // For compareSwap kernels
-    dim3 blocksPerGridCompareSwap(requiredThreads / threadsPerBlock.x);
-    // For other kernels
-    dim3 blocksPerGrid((size + threadsPerBlock.x - 1) / threadsPerBlock.x);
+    dim3 threadsPerBlock(min(size, static_cast<size_t>(maxThreadsPerBlock)));
     
+    dim3 blocksPerGrid((size + threadsPerBlock.x - 1) / threadsPerBlock.x);
+    dim3 blocksPerGridCompareSwap((requiredThreads + threadsPerBlock.x - 1) / threadsPerBlock.x);
+
     // Check if the grid size exceeds the maximum allowed size
     if (blocksPerGrid.x > deviceProp.maxGridSize[0]) {
         printf("Error: Exceeded maximum grid size\n");

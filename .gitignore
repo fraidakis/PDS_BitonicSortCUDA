@@ -1,3 +1,4 @@
 bin/
 slurm/
 report.tex
+src/bitonic_sortV4.cu
