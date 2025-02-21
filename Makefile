@@ -26,7 +26,7 @@ EXEC_RADIX = $(BIN_DIR)/radix_sort
 # Help message
 help:
 	@echo "Usage:"
-	@echo "  make bitonic v=[0|1|2|3]              : Build bitonic sort version (v) 0, 1, 2, or 3"
+	@echo "  make bitonic v=[0|1|2|3]              : Build bitonic sort version 0, 1, 2, or 3"
 	@echo "  make radix                            : Build radix sort"
 	@echo "  make all                              : Build all sorting implementations"
 	@echo "  make run v=[0|1|2|3|radix] q=[value]  : Run sorting algorithm (builds if needed)"
