@@ -8,15 +8,15 @@ This repository contains multiple CUDA implementations of **Bitonic Sort** with 
 ---
 
 ## 📌 Table of Contents
-1. [Introduction](#introduction)
-2. [Setup and Requirements](#setup-and-requirements)
-3. [Compilation and Usage](#compilation-and-usage)
-4. [Directory Structure](#directory-structure)
-5. [Algorithm Versions](#algorithm-versions)
-6. [Performance Metrics](#performance-metrics)
-7. [Debugging and Verification](#debugging-and-verification)
-8. [Makefile Targets](#makefile-targets)
-9. [Cleanup](#cleanup)
+1. [Introduction](#-introduction)
+2. [Setup and Requirements](#%EF%B8%8F-setup-and-requirements)
+3. [Compilation and Usage](#-compilation-and-usage)
+4. [Directory Structure](#-directory-structure)
+5. [Algorithm Versions](#-algorithm-versions)
+6. [Performance Metrics](#-performance-metrics)
+7. [Debugging and Verification](#-debugging-and-verification)
+8. [Makefile Targets](#-makefile-targets)
+9. [Cleanup](#-cleanup)
 
 ---
 
